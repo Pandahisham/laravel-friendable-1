@@ -5,21 +5,21 @@
 First, pull in the package through Composer.
 
 ```js
-composer require tshafer/laravel-friendable:1.0.*@dev
+composer require tshafer/laravel-friendable
 ```
 
 And then include the service provider within `app/config/app.php`.
 
 ```php
 'providers' => [
-    DraperStudio\Friendable\ServiceProvider::class
+    Tshafer\Friendable\ServiceProvider::class
 ];
 ```
 
 At last you need to publish and run the migration.
 
 ```
-php artisan vendor:publish --provider="tshafer\Friendable\ServiceProvider" && php artisan migrate
+php artisan vendor:publish --provider="Tshafer\Friendable\ServiceProvider" && php artisan migrate
 ```
 
 ## Setup a Model
