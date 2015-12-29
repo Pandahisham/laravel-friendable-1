@@ -1,8 +1,8 @@
 <?php
 
-    namespace Tshafer\Friendable\Traits;
+namespace Tshafer\Friendable\Traits;
 
-    use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
     use Tshafer\Friendable\Models\Friend;
     use Tshafer\Friendable\Status;
 
@@ -11,13 +11,12 @@
      */
     trait Friendable
     {
-
         /**
          * @return \Illuminate\Database\Eloquent\Relations\MorphMany
          */
         public function friends()
         {
-            return $this->morphMany( Friend::class, 'sender' );
+            return $this->morphMany(Friend::class, 'sender');
         }
 
         /**
@@ -25,19 +24,19 @@
          *
          * @return $this|void
          */
-        public function befriend( Model $recipient )
+        public function befriend(Model $recipient)
         {
-            if ($this->isFriendsWith( $recipient )) {
+            if ($this->isFriendsWith($recipient)) {
                 return;
             }
 
-            $friendship = ( new Friend() )->fill( [
-                'recipient_id'   => $recipient->id,
-                'recipient_type' => get_class( $recipient ),
-                'status'         => Status::PENDING,
-            ] );
+            $friendship = ( new Friend() )->fill([
+                'recipient_id' => $recipient->id,
+                'recipient_type' => get_class($recipient),
+                'status' => Status::PENDING,
+            ]);
 
-            $this->friends()->save( $friendship );
+            $this->friends()->save($friendship);
 
             return $friendship;
         }
@@ -45,13 +44,13 @@
         /**
          * @param Model $recipient
          */
-        public function unfriend( Model $recipient )
+        public function unfriend(Model $recipient)
         {
-            if ( ! $this->isFriendsWith( $recipient )) {
+            if (!$this->isFriendsWith($recipient)) {
                 return;
             }
 
-            return $this->findFriendship( $recipient )->delete();
+            return $this->findFriendship($recipient)->delete();
         }
 
         /**
@@ -60,12 +59,12 @@
          *
          * @return mixed
          */
-        public function isFriendsWith( Model $recipient, $status = null )
+        public function isFriendsWith(Model $recipient, $status = null)
         {
-            $exists = $this->findFriendship( $recipient );
+            $exists = $this->findFriendship($recipient);
 
-            if ( ! empty( $status )) {
-                $exists = $exists->where( 'status', $status );
+            if (!empty($status)) {
+                $exists = $exists->where('status', $status);
             }
 
             return $exists->count();
@@ -74,57 +73,57 @@
         /**
          * @param Model $recipient
          */
-        public function acceptFriendRequest( Model $recipient )
+        public function acceptFriendRequest(Model $recipient)
         {
-            if ( ! $this->isFriendsWith( $recipient )) {
+            if (!$this->isFriendsWith($recipient)) {
                 return;
             }
 
-            return $this->findFriendship( $recipient )->update( [
+            return $this->findFriendship($recipient)->update([
                 'status' => Status::ACCEPTED,
-            ] );
+            ]);
         }
 
         /**
          * @param Model $recipient
          */
-        public function denyFriendRequest( Model $recipient )
+        public function denyFriendRequest(Model $recipient)
         {
-            if ( ! $this->isFriendsWith( $recipient )) {
+            if (!$this->isFriendsWith($recipient)) {
                 return;
             }
 
-            return $this->findFriendship( $recipient )->update( [
+            return $this->findFriendship($recipient)->update([
                 'status' => Status::DENIED,
-            ] );
+            ]);
         }
 
         /**
          * @param Model $recipient
          */
-        public function blockFriendRequest( Model $recipient )
+        public function blockFriendRequest(Model $recipient)
         {
-            if ( ! $this->isFriendsWith( $recipient )) {
+            if (!$this->isFriendsWith($recipient)) {
                 return;
             }
 
-            return $this->findFriendship( $recipient )->update( [
+            return $this->findFriendship($recipient)->update([
                 'status' => Status::BLOCKED,
-            ] );
+            ]);
         }
 
         /**
          * @param Model $recipient
          */
-        public function unblockFriendRequest( Model $recipient )
+        public function unblockFriendRequest(Model $recipient)
         {
-            if ( ! $this->isFriendsWith( $recipient )) {
+            if (!$this->isFriendsWith($recipient)) {
                 return;
             }
 
-            return $this->findFriendship( $recipient )->update( [
+            return $this->findFriendship($recipient)->update([
                 'status' => Status::PENDING,
-            ] );
+            ]);
         }
 
         /**
@@ -132,9 +131,9 @@
          *
          * @return mixed
          */
-        public function getFriendship( $recipient )
+        public function getFriendship($recipient)
         {
-            return $this->findFriendship( $recipient )->first();
+            return $this->findFriendship($recipient)->first();
         }
 
         /**
@@ -143,9 +142,9 @@
          *
          * @return array
          */
-        public function getAllFriendships( $limit = null, $offset = null )
+        public function getAllFriendships($limit = null, $offset = null)
         {
-            return $this->findFriendshipsByStatus( null, $limit, $offset );
+            return $this->findFriendshipsByStatus(null, $limit, $offset);
         }
 
         /**
@@ -154,9 +153,9 @@
          *
          * @return array
          */
-        public function getPendingFriendships( $limit = null, $offset = 0 )
+        public function getPendingFriendships($limit = null, $offset = 0)
         {
-            return $this->findFriendshipsByStatus( Status::PENDING, $limit, $offset );
+            return $this->findFriendshipsByStatus(Status::PENDING, $limit, $offset);
         }
 
         /**
@@ -165,9 +164,9 @@
          *
          * @return array
          */
-        public function getAcceptedFriendships( $limit = null, $offset = 0 )
+        public function getAcceptedFriendships($limit = null, $offset = 0)
         {
-            return $this->findFriendshipsByStatus( Status::ACCEPTED, $limit, $offset );
+            return $this->findFriendshipsByStatus(Status::ACCEPTED, $limit, $offset);
         }
 
         /**
@@ -176,9 +175,9 @@
          *
          * @return array
          */
-        public function getDeniedFriendships( $limit = null, $offset = 0 )
+        public function getDeniedFriendships($limit = null, $offset = 0)
         {
-            return $this->findFriendshipsByStatus( Status::DENIED, $limit, $offset );
+            return $this->findFriendshipsByStatus(Status::DENIED, $limit, $offset);
         }
 
         /**
@@ -187,9 +186,9 @@
          *
          * @return array
          */
-        public function getBlockedFriendships( $limit = null, $offset = 0 )
+        public function getBlockedFriendships($limit = null, $offset = 0)
         {
-            return $this->findFriendshipsByStatus( Status::BLOCKED, $limit, $offset );
+            return $this->findFriendshipsByStatus(Status::BLOCKED, $limit, $offset);
         }
 
         /**
@@ -197,9 +196,9 @@
          *
          * @return bool
          */
-        public function hasBlocked( Model $recipient )
+        public function hasBlocked(Model $recipient)
         {
-            return $this->getFriendship( $recipient )->status === Status::BLOCKED;
+            return $this->getFriendship($recipient)->status === Status::BLOCKED;
         }
 
         /**
@@ -207,17 +206,17 @@
          *
          * @return bool
          */
-        public function isBlockedBy( Model $recipient )
+        public function isBlockedBy(Model $recipient)
         {
-            $friendship = Friend::where( function ( $query ) use ( $recipient ) {
-                $query->where( 'sender_id', $this->id );
-                $query->where( 'sender_type', get_class( $this ) );
+            $friendship = Friend::where(function ($query) use ($recipient) {
+                $query->where('sender_id', $this->id);
+                $query->where('sender_type', get_class($this));
 
-                $query->where( 'recipient_id', $recipient->id );
-                $query->where( 'recipient_type', get_class( $recipient ) );
-            } )->first();
+                $query->where('recipient_id', $recipient->id);
+                $query->where('recipient_type', get_class($recipient));
+            })->first();
 
-            return $friendship ? ( $friendship->status === Status::BLOCKED ) : false;
+            return $friendship ? ($friendship->status === Status::BLOCKED) : false;
         }
 
         /**
@@ -225,11 +224,11 @@
          */
         public function getFriendRequests()
         {
-            return Friend::where( function ( $query ) {
-                $query->where( 'recipient_id', $this->id );
-                $query->where( 'recipient_type', get_class( $this ) );
-                $query->where( 'status', Status::PENDING );
-            } )->get();
+            return Friend::where(function ($query) {
+                $query->where('recipient_id', $this->id);
+                $query->where('recipient_type', get_class($this));
+                $query->where('status', Status::PENDING);
+            })->get();
         }
 
         /**
@@ -237,21 +236,21 @@
          *
          * @return mixed
          */
-        private function findFriendship( Model $recipient )
+        private function findFriendship(Model $recipient)
         {
-            return Friend::where( function ( $query ) use ( $recipient ) {
-                $query->where( 'sender_id', $this->id );
-                $query->where( 'sender_type', get_class( $this ) );
+            return Friend::where(function ($query) use ($recipient) {
+                $query->where('sender_id', $this->id);
+                $query->where('sender_type', get_class($this));
 
-                $query->where( 'recipient_id', $recipient->id );
-                $query->where( 'recipient_type', get_class( $recipient ) );
-            } )->orWhere( function ( $query ) use ( $recipient ) {
-                $query->where( 'sender_id', $recipient->id );
-                $query->where( 'sender_type', get_class( $recipient ) );
+                $query->where('recipient_id', $recipient->id);
+                $query->where('recipient_type', get_class($recipient));
+            })->orWhere(function ($query) use ($recipient) {
+                $query->where('sender_id', $recipient->id);
+                $query->where('sender_type', get_class($recipient));
 
-                $query->where( 'recipient_id', $this->id );
-                $query->where( 'recipient_type', get_class( $this ) );
-            } );
+                $query->where('recipient_id', $this->id);
+                $query->where('recipient_type', get_class($this));
+            });
         }
 
         /**
@@ -261,38 +260,38 @@
          *
          * @return array
          */
-        private function findFriendshipsByStatus( $status, $limit, $offset )
+        private function findFriendshipsByStatus($status, $limit, $offset)
         {
-            $friendships = [ ];
+            $friendships = [];
 
-            $query = Friend::where( function ( $query ) use ( $status ) {
-                $query->where( 'sender_id', $this->id );
-                $query->where( 'sender_type', get_class( $this ) );
+            $query = Friend::where(function ($query) use ($status) {
+                $query->where('sender_id', $this->id);
+                $query->where('sender_type', get_class($this));
 
-                if ( ! empty( $status )) {
-                    $query->where( 'status', $status );
+                if (!empty($status)) {
+                    $query->where('status', $status);
                 }
-            } )->orWhere( function ( $query ) use ( $status ) {
-                $query->where( 'recipient_id', $this->id );
-                $query->where( 'recipient_type', get_class( $this ) );
+            })->orWhere(function ($query) use ($status) {
+                $query->where('recipient_id', $this->id);
+                $query->where('recipient_type', get_class($this));
 
-                if ( ! empty( $status )) {
-                    $query->where( 'status', $status );
+                if (!empty($status)) {
+                    $query->where('status', $status);
                 }
-            } );
+            });
 
-            if ( ! empty( $limit )) {
-                $query->take( $limit );
+            if (!empty($limit)) {
+                $query->take($limit);
             }
 
-            if ( ! empty( $offset )) {
-                $query->skip( $offset );
+            if (!empty($offset)) {
+                $query->skip($offset);
             }
 
             foreach ($query->get() as $friendship) {
-                $friendships[] = $this->getFriendship( $this->find(
-                    ( $friendship->sender_id == $this->id ) ? $friendship->recipient_id : $friendship->sender_id
-                ) );
+                $friendships[] = $this->getFriendship($this->find(
+                    ($friendship->sender_id == $this->id) ? $friendship->recipient_id : $friendship->sender_id
+                ));
             }
 
             return $friendships;

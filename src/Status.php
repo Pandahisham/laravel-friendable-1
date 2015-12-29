@@ -1,15 +1,12 @@
 <?php
 
-    namespace Tshafer\Friendable;
+namespace Tshafer\Friendable;
 
-    /**
-     * Class Status
-     *
-     * @package Tshafer\Friendable
+/**
+     * Class Status.
      */
     class Status
     {
-
         /**
          *
          */
