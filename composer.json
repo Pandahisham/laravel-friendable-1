@@ -3,17 +3,12 @@
     "description": "Friendable Polymorphic Eloquent Models for Laravel 5",
     "require": {
         "php": ">=5.5.9",
-        "draperstudio/laravel-service-provider": "1.0.*@dev",
-        "illuminate/database": "~5.0|~5.1"
+        "tshafer/laravel-service-provider": "1.0.*",
+        "illuminate/database": "~5.0|~5.1|~5.2"
     },
     "autoload": {
         "psr-4": {
             "Tshafer\\Friendable\\": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
         }
     }
 }
