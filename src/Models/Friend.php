@@ -1,15 +1,14 @@
 <?php
 
-    namespace Tshafer\Friendable\Models;
+namespace Tshafer\Friendable\Models;
 
-    use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Model;
 
     /**
      * Class Friend.
      */
     class Friend extends Model
     {
-
         /**
          * @var string
          */
@@ -18,14 +17,14 @@
         /**
          * @var array
          */
-        protected $guarded = [ 'id', 'created_at', 'updated_at' ];
+        protected $guarded = ['id', 'created_at', 'updated_at'];
 
         /**
          * @return \Illuminate\Database\Eloquent\Relations\MorphTo
          */
         public function sender()
         {
-            return $this->morphTo( 'sender' );
+            return $this->morphTo('sender');
         }
 
         /**
@@ -33,6 +32,6 @@
          */
         public function recipient()
         {
-            return $this->morphTo( 'recipient' );
+            return $this->morphTo('recipient');
         }
     }
